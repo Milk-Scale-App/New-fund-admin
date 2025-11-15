@@ -3,319 +3,485 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fund Money - Admin Panel</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="admin.css">
+    <title>Fund Money - Gaming App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .page {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Login Page */
+        #login-page .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+
+        #login-page h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #3f51b5;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            margin: 8px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .input-group input:focus {
+            border-color: #2196F3;
+            outline: none;
+        }
+
+        .login-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .login-btn:hover {
+            background: #45a049;
+        }
+
+        .google-btn {
+            background: #4285F4;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .google-icon {
+            background: white;
+            color: #4285F4;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .links a {
+            color: #2196F3;
+            text-decoration: none;
+            display: block;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .back-btn {
+            background: #666;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        /* Dashboard */
+        .dashboard-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .dashboard-content h2 {
+            color: #3f51b5;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-content button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+
+        .user-info {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        /* Admin Login */
+        #admin-login-page .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+
+        #admin-login-page h1 {
+            text-align: center;
+            color: #3f51b5;
+            margin-bottom: 10px;
+        }
+
+        #admin-login-page p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Password Protection -->
-    <div id="passwordOverlay" class="password-overlay active">
-        <div class="password-box">
-            <h1>🔐 Fund Money Admin</h1>
-            <p>Administrator Login Panel</p>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="page active">
+        <div class="container">
+            <div class="loader"></div>
+            <h2>Fund Money</h2>
+            <p id="loading-text">App Starting...</p>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login-page" class="page">
+        <div class="container">
+            <h1>🎮 Fund Money</h1>
+            <div class="subtitle">रियल-टाइम गेमिंग ऐप</div>
             
-            <input type="password" id="adminPassword" placeholder="Enter Admin Password">
-            <button onclick="checkAdminPassword()">Login to Admin Panel</button>
+            <div class="input-group">
+                <input type="email" id="login-email" placeholder="ईमेल एड्रेस" value="test@example.com">
+                <input type="password" id="login-password" placeholder="पासवर्ड" value="password123">
+            </div>
             
-            <p id="passwordError" class="error-message">❌ Wrong password! Try again.</p>
+            <button class="login-btn" onclick="loginWithEmailPassword()">लॉगिन करें</button>
             
-            <div class="back-link">
-                <a href="index.html">← Back to User App</a>
+            <div class="google-btn" onclick="signInWithGoogle()">
+                <span class="google-icon">G</span>
+                Google के साथ लॉगिन
+            </div>
+            
+            <div class="links">
+                <a onclick="showPage('signup-page')">नया अकाउंट बनाएँ</a>
+                <a onclick="showPage('admin-login-page')">Admin Login</a>
             </div>
         </div>
     </div>
 
-    <!-- Admin Content -->
-    <div id="adminContent" class="admin-content">
-        <!-- Admin Header -->
-        <header class="admin-header">
-            <div class="header-left">
-                <h1>🎮 Fund Money Admin</h1>
-                <div class="admin-status" id="adminStatus">Connected</div>
+    <!-- Signup Page -->
+    <div id="signup-page" class="page">
+        <div class="container">
+            <h1>📝 नया अकाउंट</h1>
+            
+            <div class="input-group">
+                <input type="text" id="signup-name" placeholder="पूरा नाम" value="Test User">
+                <input type="email" id="signup-email" placeholder="ईमेल एड्रेस" value="newuser@example.com">
+                <input type="password" id="signup-password" placeholder="पासवर्ड (कम से कम 6 अक्षर)" value="password123">
             </div>
-            <div class="header-right">
-                <button class="header-btn refresh-btn" onclick="loadAllData()">
-                    🔄 Refresh
-                </button>
-                <button class="header-btn logout-btn" onclick="logoutAdmin()">
-                    🚪 Logout
-                </button>
+            
+            <button class="login-btn" onclick="signUpWithEmailPassword()">अकाउंट बनाएँ</button>
+            
+            <div class="back-btn" onclick="showPage('login-page')">
+                वापस लॉगिन पर
             </div>
-        </header>
-
-        <!-- Main Admin Container -->
-        <div class="admin-container">
-            <!-- Sidebar Navigation -->
-            <nav class="admin-sidebar">
-                <div class="sidebar-section">
-                    <h3>🎯 Game Control</h3>
-                    <button class="sidebar-btn active" onclick="showAdminSection('game-control')">
-                        🎲 Game Management
-                    </button>
-                </div>
-
-                <div class="sidebar-section">
-                    <h3>👥 User Management</h3>
-                    <button class="sidebar-btn" onclick="showAdminSection('user-management')">
-                        📋 Users List
-                    </button>
-                    <button class="sidebar-btn" onclick="showAdminSection('bulk-operations')">
-                        ⚡ Bulk Operations
-                    </button>
-                </div>
-
-                <div class="sidebar-section">
-                    <h3>💰 Transactions</h3>
-                    <button class="sidebar-btn" onclick="showAdminSection('add-money-requests')">
-                        💵 Add Money
-                    </button>
-                    <button class="sidebar-btn" onclick="showAdminSection('withdrawal-requests')">
-                        🏦 Withdrawals
-                    </button>
-                </div>
-
-                <div class="sidebar-section">
-                    <h3>📊 Analytics</h3>
-                    <button class="sidebar-btn" onclick="showAdminSection('analytics')">
-                        📈 Dashboard
-                    </button>
-                </div>
-
-                <div class="sidebar-section">
-                    <h3>📢 Notifications</h3>
-                    <button class="sidebar-btn" onclick="showAdminSection('notifications')">
-                        🔔 Send Notification
-                    </button>
-                </div>
-            </nav>
-
-            <!-- Main Content Area -->
-            <main class="admin-main">
-                <!-- Game Control Section -->
-                <section id="game-control" class="admin-section active">
-                    <h2>🎲 Game Control Panel</h2>
-                    
-                    <div class="game-status-panel">
-                        <div class="status-card">
-                            <h3>Current Game Status</h3>
-                            <div class="status-info">
-                                <p>Cycle ID: <span id="current-cycle-id">-</span></p>
-                                <p>Timer: <span id="current-timer">-</span></p>
-                                <p>Last Result: <span id="last-result-display">-</span></p>
-                                <p>Next Result: <span id="next-result-display">-</span></p>
-                            </div>
-                        </div>
-
-                        <div class="control-actions">
-                            <h3>Set Next Result</h3>
-                            <div class="result-buttons">
-                                <button class="result-btn green-btn" onclick="setNextResult('green')">
-                                    ✅ हरा (Green)
-                                </button>
-                                <button class="result-btn blue-btn" onclick="setNextResult('blue')">
-                                    🔷 नीला (Blue)
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="game-stats">
-                            <h3>Game Statistics</h3>
-                            <div class="stats-grid">
-                                <div class="stat-card">
-                                    <div class="stat-value" id="total-bets">0</div>
-                                    <div class="stat-label">Total Bets</div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-value" id="total-payout">0</div>
-                                    <div class="stat-label">Total Payout</div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-value" id="active-players">0</div>
-                                    <div class="stat-label">Active Players</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- User Management Section -->
-                <section id="user-management" class="admin-section">
-                    <h2>👥 User Management</h2>
-                    
-                    <div class="search-section">
-                        <input type="text" id="user-search" 
-                               placeholder="Search by email, user ID, or name...">
-                        <button onclick="searchUsers()">Search</button>
-                        <button onclick="loadAllUsers()">Show All</button>
-                    </div>
-
-                    <div class="users-list" id="users-list">
-                        <!-- Users will be loaded here dynamically -->
-                        <div class="loading-message">Loading users...</div>
-                    </div>
-
-                    <!-- User Details Modal -->
-                    <div id="user-details-modal" class="modal hidden">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h3>User Details</h3>
-                                <button class="close-btn" onclick="closeUserModal()">×</button>
-                            </div>
-                            <div class="modal-body" id="user-details-content">
-                                <!-- User details will be loaded here -->
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Bulk Operations Section -->
-                <section id="bulk-operations" class="admin-section">
-                    <h2>⚡ Bulk Operations</h2>
-                    
-                    <div class="bulk-actions">
-                        <div class="bulk-action-card">
-                            <h3>🎯 Quick Actions</h3>
-                            <div class="action-buttons">
-                                <button class="bulk-btn delete-btn" onclick="bulkDeleteUsers()">
-                                    🗑️ Delete Selected
-                                </button>
-                                <button class="bulk-btn block-btn" onclick="bulkBlockUsers()">
-                                    🚫 Block Selected
-                                </button>
-                                <button class="bulk-btn unblock-btn" onclick="bulkUnblockUsers()">
-                                    ✅ Unblock Selected
-                                </button>
-                                <button class="bulk-btn reset-btn" onclick="bulkResetBalances()">
-                                    💰 Reset Balances
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="selection-info">
-                            <p>Selected: <span id="selected-count">0</span> users</p>
-                            <button onclick="clearSelection()">Clear Selection</button>
-                        </div>
-                    </div>
-
-                    <div class="bulk-stats">
-                        <h3>User Statistics</h3>
-                        <div class="stats-grid">
-                            <div class="stat-card">
-                                <div class="stat-value" id="total-users">0</div>
-                                <div class="stat-label">Total Users</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value" id="active-users">0</div>
-                                <div class="stat-label">Active</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value" id="blocked-users">0</div>
-                                <div class="stat-label">Blocked</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value" id="deleted-users">0</div>
-                                <div class="stat-label">Deleted</div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Add Money Requests Section -->
-                <section id="add-money-requests" class="admin-section">
-                    <h2>💵 Add Money Requests</h2>
-                    
-                    <div class="requests-container" id="add-money-requests-list">
-                        <div class="loading-message">Loading requests...</div>
-                    </div>
-                </section>
-
-                <!-- Withdrawal Requests Section -->
-                <section id="withdrawal-requests" class="admin-section">
-                    <h2>🏦 Withdrawal Requests</h2>
-                    
-                    <div class="requests-container" id="withdrawal-requests-list">
-                        <div class="loading-message">Loading requests...</div>
-                    </div>
-                </section>
-
-                <!-- Analytics Section -->
-                <section id="analytics" class="admin-section">
-                    <h2>📊 Analytics Dashboard</h2>
-                    
-                    <div class="analytics-grid">
-                        <div class="analytics-card profit-card">
-                            <h3>💰 Today's Profit</h3>
-                            <div class="analytics-value">₹<span id="today-profit">0</span></div>
-                            <div class="analytics-trend">↑ 12% from yesterday</div>
-                        </div>
-                        
-                        <div class="analytics-card revenue-card">
-                            <h3>📈 Total Revenue</h3>
-                            <div class="analytics-value">₹<span id="total-revenue">0</span></div>
-                            <div class="analytics-trend">↑ 8% this week</div>
-                        </div>
-                        
-                        <div class="analytics-card users-card">
-                            <h3>👥 User Growth</h3>
-                            <div class="analytics-value"><span id="total-users-count">0</span></div>
-                            <div class="analytics-trend">↑ 15 new today</div>
-                        </div>
-                    </div>
-
-                    <div class="analytics-actions">
-                        <button class="export-btn" onclick="exportDailyReport()">
-                            📊 Export Daily Report
-                        </button>
-                        <button class="refresh-btn" onclick="loadAnalytics()">
-                            🔄 Refresh Analytics
-                        </button>
-                    </div>
-                </section>
-
-                <!-- Notifications Section -->
-                <section id="notifications" class="admin-section">
-                    <h2>📢 Send Notification</h2>
-                    
-                    <div class="notification-form">
-                        <div class="input-group">
-                            <label for="notification-title">Notification Title</label>
-                            <input type="text" id="notification-title" 
-                                   placeholder="Enter notification title...">
-                        </div>
-                        
-                        <div class="input-group">
-                            <label for="notification-message">Message</label>
-                            <textarea id="notification-message" 
-                                      placeholder="Enter notification message..." 
-                                      rows="4"></textarea>
-                        </div>
-                        
-                        <div class="input-group">
-                            <label for="notification-image">Image URL (Optional)</label>
-                            <input type="url" id="notification-image" 
-                                   placeholder="https://example.com/image.jpg">
-                        </div>
-                        
-                        <button class="send-notification-btn" onclick="sendNotification()">
-                            📢 Send Notification to All Users
-                        </button>
-                    </div>
-
-                    <div class="notification-history">
-                        <h3>📋 Sent Notifications</h3>
-                        <div id="notifications-history-list">
-                            <div class="loading-message">Loading history...</div>
-                        </div>
-                    </div>
-                </section>
-            </main>
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-    <script src="admin.js"></script>
+    <!-- Dashboard Page -->
+    <div id="dashboard-page" class="page">
+        <div class="container">
+            <div class="dashboard-content">
+                <h2>🎉 स्वागत है! लॉगिन सफल</h2>
+                <p>आप सफलतापूर्वक लॉगिन हो गए हैं।</p>
+                <div class="user-info">
+                    <p><strong>यूज़र:</strong> <span id="user-name">-</span></p>
+                    <p><strong>ईमेल:</strong> <span id="user-email">-</span></p>
+                    <p><strong>बैलेंस:</strong> ₹<span id="user-balance">1000</span></p>
+                </div>
+                <button onclick="logout()">लॉगआउट करें</button>
+                <button onclick="showPage('login-page')">वापस लॉगिन पर</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Page -->
+    <div id="admin-login-page" class="page">
+        <div class="container">
+            <h1>🔐 Admin Login</h1>
+            <p>Fund Money Admin Panel</p>
+            
+            <div class="input-group">
+                <input type="password" id="admin-password" placeholder="Enter Admin Password" value="Winner@#2008">
+            </div>
+            
+            <button class="login-btn" onclick="loginToAdminPanel()">Admin Login</button>
+            
+            <div class="back-btn" onclick="showPage('login-page')">
+                Back to User App
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global Variables
+        let currentUser = null;
+
+        // Page Navigation Function
+        function showPage(pageId) {
+            console.log('Switching to page:', pageId);
+            
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show the requested page
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                console.log('Successfully showed page:', pageId);
+            } else {
+                console.error('Page not found:', pageId);
+            }
+        }
+
+        // Authentication Functions
+        function loginWithEmailPassword() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) {
+                alert('कृपया ईमेल और पासवर्ड दर्ज करें');
+                return;
+            }
+            
+            console.log('Login attempt with:', email);
+            
+            // Mock login process
+            currentUser = {
+                displayName: 'Test User',
+                email: email,
+                uid: 'test-user-123'
+            };
+            
+            // Update UI
+            document.getElementById('user-name').textContent = currentUser.displayName;
+            document.getElementById('user-email').textContent = currentUser.email;
+            
+            showPage('dashboard-page');
+            alert('लॉगिन सफल! स्वागत है ' + currentUser.displayName);
+        }
+
+        function signUpWithEmailPassword() {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            
+            if (!name || !email || !password) {
+                alert('कृपया सभी जानकारी भरें');
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert('पासवर्ड कम से कम 6 अक्षर का होना चाहिए');
+                return;
+            }
+            
+            console.log('Signup attempt for:', name, email);
+            
+            // Mock signup process
+            currentUser = {
+                displayName: name,
+                email: email,
+                uid: 'new-user-' + Date.now()
+            };
+            
+            // Update UI
+            document.getElementById('user-name').textContent = currentUser.displayName;
+            document.getElementById('user-email').textContent = currentUser.email;
+            
+            showPage('dashboard-page');
+            alert('अकाउंट सफलतापूर्वक बना! स्वागत है ' + currentUser.displayName);
+        }
+
+        function signInWithGoogle() {
+            console.log('Google login attempt');
+            
+            // Mock Google login
+            currentUser = {
+                displayName: 'Google User',
+                email: 'googleuser@example.com',
+                uid: 'google-user-123'
+            };
+            
+            // Update UI
+            document.getElementById('user-name').textContent = currentUser.displayName;
+            document.getElementById('user-email').textContent = currentUser.email;
+            
+            showPage('dashboard-page');
+            alert('Google लॉगिन सफल! स्वागत है ' + currentUser.displayName);
+        }
+
+        function loginToAdminPanel() {
+            const password = document.getElementById('admin-password').value;
+            
+            if (password === 'Winner@#2008') {
+                alert('✅ Admin login successful!');
+                // In real app: window.location.href = 'admin.html';
+            } else {
+                alert('❌ गलत पासवर्ड! सही पासवर्ड है: Winner@#2008');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            showPage('login-page');
+            alert('लॉगआउट सफल!');
+        }
+
+        // Initialize App
+        function initializeApp() {
+            console.log('🚀 App initialization started...');
+            
+            // Show loading for 2 seconds then show login page
+            setTimeout(() => {
+                console.log('🕒 Loading complete, showing login page...');
+                showPage('login-page');
+            }, 2000);
+        }
+
+        // Start the app when page loads
+        window.addEventListener('load', function() {
+            console.log('📄 Page loaded successfully');
+            initializeApp();
+        });
+
+        // Add keyboard support
+        document.addEventListener('DOMContentLoaded', function() {
+            // Enter key support for forms
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        
+                        const activePage = document.querySelector('.page.active').id;
+                        
+                        if (activePage === 'login-page') {
+                            loginWithEmailPassword();
+                        } else if (activePage === 'signup-page') {
+                            signUpWithEmailPassword();
+                        } else if (activePage === 'admin-login-page') {
+                            loginToAdminPanel();
+                        }
+                    }
+                });
+            });
+            
+            console.log('🎯 Event listeners attached successfully');
+        });
+
+        // Debug: Log all page elements
+        console.log('📋 Available pages:', 
+            Array.from(document.querySelectorAll('.page')).map(p => p.id)
+        );
+    </script>
 </body>
-                                           </html>
+</html>
